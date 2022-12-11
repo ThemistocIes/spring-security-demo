@@ -1,9 +1,11 @@
 package home.springsecuritydemo.config;
 
+import home.springsecuritydemo.model.Permission;
 import home.springsecuritydemo.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +19,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     @Bean
@@ -26,9 +29,6 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                         .antMatchers("/").permitAll()
-                        .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                        .antMatchers(HttpMethod.POST, "/api/**").hasRole(Role.ADMIN.name())
-                        .antMatchers(HttpMethod.DELETE, "/api/**").hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());
@@ -42,13 +42,13 @@ public class SecurityConfiguration {
         UserDetails admin = User
                 .withUsername("admin")
                 .password(passwordEncoder().encode("admin"))
-                .roles(Role.ADMIN.name())
+                .authorities(Role.ADMIN.getAuthorities())
                 .build();
 
         UserDetails user = User
                 .withUsername("user")
                 .password(passwordEncoder().encode("user"))
-                .roles(Role.USER.name())
+                .authorities(Role.USER.getAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(admin, user);
