@@ -1,4 +1,4 @@
-package home.springsecuritydemo.controller;
+package home.springsecuritydemo.api.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/auth")
-public class AuthorizationController {
+public class AuthorizationControllerV1 {
 
     @GetMapping("/login")
     public String getLoginPage() {

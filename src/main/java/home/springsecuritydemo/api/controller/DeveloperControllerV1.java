@@ -1,4 +1,4 @@
-package home.springsecuritydemo.api;
+package home.springsecuritydemo.api.controller;
 
 import home.springsecuritydemo.model.Developer;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("api/v1/developers")
+@RequestMapping("/api/v1/developers")
 public class DeveloperControllerV1 {
 
     private final List<Developer> developers = Stream.of(
